@@ -9,5 +9,12 @@
             "email": "fale_com_lopez@hotmail.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Igrejanet\\Firebird\\": "src/"
+        }
+    },
+    "require": {
+        "jacquestvanzuydam/laravel-firebird": "dev-5.5-support"
+    }
 }
