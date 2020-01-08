@@ -22,6 +22,7 @@
         }
     },
     "require": {
+        "php": ">=7.1",
         "jacquestvanzuydam/laravel-firebird": "dev-5.5-support"
     }
 }
