@@ -14,6 +14,13 @@
             "Igrejanet\\Firebird\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Igrejanet\\Firebird\\Providers\\FirebirdServiceProvider"
+            ]
+        }
+    },
     "require": {
         "jacquestvanzuydam/laravel-firebird": "dev-5.5-support"
     }
