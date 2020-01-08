@@ -1,0 +1,13 @@
+{
+    "name": "igrejanet/laravel-firebird",
+    "description": "Firebird package for use with Laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matheus Lopes Santos",
+            "email": "fale_com_lopez@hotmail.com"
+        }
+    ],
+    "require": {}
+}
