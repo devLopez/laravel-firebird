@@ -8,7 +8,6 @@ create table users(
     id int not null,
     name varchar(45) not null,
     email varchar(60),
-    constraint USERS_EMAIL_UNIQUE unique(email),
     constraint PK_USERS PRIMARY KEY (id)
 );
 
