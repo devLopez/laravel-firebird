@@ -10,7 +10,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -25,5 +25,9 @@
         <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
+        <env name="DB_DATABASE" value="/home/matheus/databases/laravel-firebird.fdb"/>
+        <env name="DB_HOST" value="localhost"/>
+        <env name="DB_USERNAME" value="sysdba"/>
+        <env name="DB_PASSWORD" value="masterkey"/>
     </php>
 </phpunit>
