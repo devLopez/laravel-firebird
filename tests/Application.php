@@ -9,6 +9,8 @@ use Illuminate\Config\Repository as Config;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 
 class Application extends TestCase
@@ -19,6 +21,20 @@ class Application extends TestCase
     {
         parent::setUp();
 
+        $this->startContainer();
+    }
+
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        $static = new static();
+        $static->startContainer();
+        $static->dropData();
+    }
+
+    protected function startContainer()
+    {
         $this->app = new Container();
 
         $this->app->singleton('config', function()
@@ -38,12 +54,19 @@ class Application extends TestCase
             return new FirebirdDatabaseManager($app, $app['db.factory']);
         });
 
+        $this->app->singleton('events', function($app)
+        {
+            return new Dispatcher($app);
+        });
+
+        $this->app->singleton('request', function() {
+            return new Request();
+        });
+
         Container::setInstance($this->app);
 
         Model::setConnectionResolver($this->app['db']);
-
-//        $this->recriateTables();
-        $this->dropData();
+        Model::setEventDispatcher($this->app['events']);
     }
 
     public function dropData()
