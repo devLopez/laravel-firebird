@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Faker\Factory;
 use Firebird\ConnectionFactory as FirebirdConnectionFactory;
 use Igrejanet\Firebird\Database\FirebirdDatabaseManager;
 use Illuminate\Config\Repository as Config;
@@ -42,6 +43,16 @@ class Application extends TestCase
         Model::setConnectionResolver($this->app['db']);
 
 //        $this->recriateTables();
+        $this->dropData();
+    }
+
+    public function dropData()
+    {
+        /** @var FirebirdDatabaseManager $db */
+        $db = $this->app['db'];
+
+        $db->table('USERS')->delete();
+        $db->table('PRODUCTS')->delete();
     }
 
     public function recriateTables()

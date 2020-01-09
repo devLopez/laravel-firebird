@@ -4,33 +4,40 @@ namespace Tests;
 
 use Igrejanet\Firebird\FirebirdModel;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
+use Faker\Factory;
+use Tests\Models\Product;
 use Tests\Models\User;
 
 class FirebirdModelTest extends Application
 {
     public function testInstanceOfModel()
     {
-        $user = new User();
+        $faker = Factory::create('pt_BR');
+
+        $user = new User([
+            'NAME' => $faker->name,
+            'EMAIL' => $faker->safeEmail
+        ]);
+
+        $user->save();
 
         $this->assertInstanceOf(Model::class, $user);
         $this->assertInstanceOf(FirebirdModel::class, $user);
+        $this->assertTrue($user->exists);
     }
 
-    public function testAllMethod()
+    public function testInstanceOfProducts()
     {
-        $user = User::all();
+        $faker = Factory::create('pt_BR');
 
-        $this->assertInstanceOf(Collection::class, $user);
-    }
-
-    public function testCreateMethod()
-    {
-        $user = User::create([
-            'NAME' => 'Matheus Lopes Santos',
-            'EMAIL' => 'email@email.com'
+        $product = new Product([
+            'PRODUCT_NAME' => 'Água',
+            'PRICE' => $faker->randomFloat(2, 1, 10)
         ]);
 
-        $this->assertTrue($user->exists);
+        $product->save();
+
+        $this->assertInstanceOf(FirebirdModel::class, $product);
+        $this->assertTrue($product->exists);
     }
 }
