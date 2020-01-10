@@ -9,5 +9,34 @@
             "email": "fale_com_lopez@hotmail.com"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Igrejanet\\Firebird\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Igrejanet\\Firebird\\Providers\\FirebirdServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "ext-pdo": "*",
+        "ext-pdo_firebird": "*",
+        "jacquestvanzuydam/laravel-firebird": "dev-5.5-support",
+        "illuminate/database": "^5.5",
+        "masterkey/repository": "~7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "fzaninotto/faker": "^1.9",
+        "illuminate/config": "^5.5"
+    }
 }
