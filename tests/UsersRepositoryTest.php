@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Faker\Factory;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Tests\Models\User;
 use Tests\Repositories\Users;
@@ -41,11 +42,14 @@ class UsersRepositoryTest extends Application
         $this->assertInstanceOf(Paginator::class, $pagination);
     }
 
+    /**
+     * @throws \RepositoryException
+     */
     public function testFullPagination()
     {
         $users = new Users($this->app);
         $pagination = $users->paginate(5);
 
-        var_dump($pagination);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $pagination);
     }
 }

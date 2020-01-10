@@ -3,6 +3,7 @@
 namespace Igrejanet\Firebird;
 
 use Illuminate\Database\Eloquent\{Builder, Model};
+use Igrejanet\Firebird\Query\FirebirdBuilder;
 use RuntimeException;
 
 /**
@@ -82,5 +83,19 @@ class FirebirdModel extends Model
 
             $this->setAttribute($keyName, $id);
         }
+    }
+
+    /**
+     * @return FirebirdBuilder|\Illuminate\Database\Query\Builder
+     */
+    protected function newBaseQueryBuilder()
+    {
+        $connection = $this->getConnection();
+
+        return new FirebirdBuilder(
+            $connection,
+            $connection->getQueryGrammar(),
+            $connection->getPostProcessor()
+        );
     }
 }
