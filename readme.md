@@ -50,7 +50,7 @@ perfeitamente com o nosso package de repository [Masterkey Repository](https://g
 O que muda? Nada. Apenas realize a instalação do package e voila
 
 ```bash
-$ composer require masterkey/repository:^7.0
+$ composer require masterkey/repository:^7.3
 ```
 
 Versões anteriores não são suportadas e/ou não foram testadas
