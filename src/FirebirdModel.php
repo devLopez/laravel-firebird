@@ -2,8 +2,9 @@
 
 namespace Igrejanet\Firebird;
 
-use Illuminate\Database\Eloquent\{Builder, Model};
+use Igrejanet\Firebird\Increasers\{IncreaseByGenerator, IncreaseById};
 use Igrejanet\Firebird\Query\FirebirdBuilder;
+use Illuminate\Database\Eloquent\{Builder, Model};
 use RuntimeException;
 
 /**
@@ -26,7 +27,7 @@ class FirebirdModel extends Model
      */
     public function increaseById()
     {
-        $row = $this->getConnection()->selectOne('SELECT COALESCE(MAX('. $this->getKeyName() .'), 0) + 1 as CODIGO FROM ' . $this->table);
+        $row = $this->getConnection()->selectOne(new IncreaseById($this->getKeyName(), $this->getTable()));
 
         if ( $row ) {
             return $row->CODIGO;
@@ -41,7 +42,7 @@ class FirebirdModel extends Model
      */
     public function increaseByGenerator()
     {
-        $row = $this->getConnection()->selectOne('SELECT GEN_ID('. $this->generator .', 1) AS CODIGO FROM RDB$DATABASE');
+        $row = $this->getConnection()->selectOne(new IncreaseByGenerator($this->generator));
 
         if ( $row ) {
             return $row->CODIGO;
