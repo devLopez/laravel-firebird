@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5caa0bc23633e7992c9591e1ae8f772",
+    "content-hash": "aecdc658158bb8045b8e1e8dc393aef3",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -942,16 +942,16 @@
         },
         {
             "name": "masterkey/repository",
-            "version": "7.2.2",
+            "version": "7.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MasterkeyInformatica/Repository.git",
-                "reference": "eb1aa278538f294611a0d10ab7d180a5f86304f0"
+                "reference": "231df3c8fee0e610fae6ff069d7bae1e728a328e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MasterkeyInformatica/Repository/zipball/eb1aa278538f294611a0d10ab7d180a5f86304f0",
-                "reference": "eb1aa278538f294611a0d10ab7d180a5f86304f0",
+                "url": "https://api.github.com/repos/MasterkeyInformatica/Repository/zipball/231df3c8fee0e610fae6ff069d7bae1e728a328e",
+                "reference": "231df3c8fee0e610fae6ff069d7bae1e728a328e",
                 "shasum": ""
             },
             "require": {
@@ -1000,7 +1000,7 @@
                 }
             ],
             "description": "Repository Pattern for Laravel 5",
-            "time": "2020-01-08T17:40:13+00:00"
+            "time": "2020-01-10T11:33:20+00:00"
         },
         {
             "name": "nesbot/carbon",
