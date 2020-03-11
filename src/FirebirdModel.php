@@ -21,6 +21,11 @@ class FirebirdModel extends Model
      */
     protected $generator = null;
 
+    public function runningFirebird() : bool
+    {
+        return $this->getConnection()->getDriverName() == 'firebird';
+    }
+
     /**
      * @return int
      * @throws RuntimeException
@@ -69,20 +74,24 @@ class FirebirdModel extends Model
      */
     protected function insertAndSetId(Builder $query, $attributes)
     {
-        $keyName = $this->getKeyName();
-
-        $primaryKeyIsSetted = ( isset($attributes[$keyName]) && ! is_null($attributes[$keyName]) );
-
-        if ( $primaryKeyIsSetted ) {
-            $query->insert($attributes);
+        if ( ! $this->runningFirebird() ) {
+            parent::insertAndSetId($query, $attributes);
         } else {
-            $id = $this->generateId();
+            $keyName = $this->getKeyName();
 
-            $attributes[$keyName] = $id;
+            $primaryKeyIsSetted = ( isset($attributes[$keyName]) && ! is_null($attributes[$keyName]) );
 
-            $query->insert($attributes);
+            if ( $primaryKeyIsSetted ) {
+                $query->insert($attributes);
+            } else {
+                $id = $this->generateId();
 
-            $this->setAttribute($keyName, $id);
+                $attributes[$keyName] = $id;
+
+                $query->insert($attributes);
+
+                $this->setAttribute($keyName, $id);
+            }
         }
     }
 
