@@ -3,10 +3,15 @@
 namespace Tests;
 
 use Faker\Factory;
+use Firebird\Connection as FirebirdConnection;
 use Firebird\ConnectionFactory as FirebirdConnectionFactory;
+use Firebird\FirebirdConnector;
 use Igrejanet\Firebird\Database\FirebirdDatabaseManager;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Container\Container;
+use Illuminate\Database\Connection;
+use Illuminate\Database\Connectors\ConnectionFactory;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Events\Dispatcher;
@@ -17,14 +22,14 @@ class Application extends TestCase
 {
     protected $app;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
         $this->startContainer();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass() : void
     {
         parent::setUpBeforeClass();
 
@@ -44,15 +49,33 @@ class Application extends TestCase
             ]);
         });
 
-        $this->app->singleton('db.factory', function($app)
-        {
-            return new FirebirdConnectionFactory($app);
+        $this->app->bind('db.connector.firebird', FirebirdConnector::class);
+
+        Connection::resolverFor('firebird', function ($connection, $database, $tablePrefix, $config) {
+            return new FirebirdConnection($connection, $database, $tablePrefix, $config);
         });
 
-        $this->app->singleton('db', function ($app)
+        $this->app->singleton('db.factory', function ($app) {
+            return new ConnectionFactory($app);
+        });
+
+        $this->app->singleton('db', function ($app) {
+            return new DatabaseManager($app, $app['db.factory']);
+        });
+
+        $this->app->bind('db.connection', function ($app) {
+            return $app['db']->connection();
+        });
+
+        /*$this->app->singleton('db.factory', function($app)
+        {
+            return new FirebirdConnectionFactory($app);
+        });*/
+
+        /*$this->app->singleton('db', function ($app)
         {
             return new FirebirdDatabaseManager($app, $app['db.factory']);
-        });
+        });*/
 
         $this->app->singleton('events', function($app)
         {

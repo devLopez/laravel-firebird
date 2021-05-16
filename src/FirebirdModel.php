@@ -3,15 +3,14 @@
 namespace Igrejanet\Firebird;
 
 use Igrejanet\Firebird\Increasers\{IncreaseByGenerator, IncreaseById};
-use Igrejanet\Firebird\Query\FirebirdBuilder;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use RuntimeException;
 
 /**
  * FirebirdModel
  *
- * @author Matheus Lopes Santos <fale_com_lopez@hotmail.com>
- * @version 1.0.0
+ * @author  Matheus Lopes Santos <fale_com_lopez@hotmail.com>
+ * @version 2.0.0
  * @package Igrejanet\Firebird
  */
 class FirebirdModel extends Model
@@ -20,6 +19,50 @@ class FirebirdModel extends Model
      * @var null|string
      */
     protected $generator = null;
+
+    /**
+     * @param Builder $query
+     * @param array   $attributes
+     */
+    protected function insertAndSetId(Builder $query, $attributes)
+    {
+        if ( ! $this->runningFirebird() ) {
+            parent::insertAndSetId($query, $attributes);
+        } else {
+            $keyName = $this->getKeyName();
+
+            $primaryKeyIsSetted = ( isset($attributes[$keyName]) && ! is_null($attributes[$keyName]) );
+
+            if ( $primaryKeyIsSetted ) {
+                $query->insert($attributes);
+            } else {
+                $id = $this->generateId();
+
+                $attributes[$keyName] = $id;
+
+                $query->insert($attributes);
+
+                $this->setAttribute($keyName, $id);
+            }
+        }
+    }
+
+    public function runningFirebird() : bool
+    {
+        return $this->getConnection()->getDriverName() == 'firebird';
+    }
+
+    /**
+     * @return int
+     */
+    public function generateId()
+    {
+        if ( is_null($this->generator) ) {
+            return $this->increaseById();
+        }
+
+        return $this->increaseByGenerator();
+    }
 
     /**
      * @return int
@@ -49,54 +92,5 @@ class FirebirdModel extends Model
         }
 
         throw new RuntimeException('Ocorreu um erro ao gerar o nº do registro. Tente novamente');
-    }
-
-    /**
-     * @return int
-     */
-    public function generateId()
-    {
-        if ( is_null($this->generator) ) {
-            return $this->increaseById();
-        }
-
-        return $this->increaseByGenerator();
-    }
-
-    /**
-     * @param Builder $query
-     * @param array   $attributes
-     */
-    protected function insertAndSetId(Builder $query, $attributes)
-    {
-        $keyName = $this->getKeyName();
-
-        $primaryKeyIsSetted = ( isset($attributes[$keyName]) && ! is_null($attributes[$keyName]) );
-
-        if ( $primaryKeyIsSetted ) {
-            $query->insert($attributes);
-        } else {
-            $id = $this->generateId();
-
-            $attributes[$keyName] = $id;
-
-            $query->insert($attributes);
-
-            $this->setAttribute($keyName, $id);
-        }
-    }
-
-    /**
-     * @return FirebirdBuilder|\Illuminate\Database\Query\Builder
-     */
-    protected function newBaseQueryBuilder()
-    {
-        $connection = $this->getConnection();
-
-        return new FirebirdBuilder(
-            $connection,
-            $connection->getQueryGrammar(),
-            $connection->getPostProcessor()
-        );
     }
 }

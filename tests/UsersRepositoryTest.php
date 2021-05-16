@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Faker\Factory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Masterkey\Repository\Criteria\Select;
@@ -34,7 +35,7 @@ class UsersRepositoryTest extends Application
         $faker = Factory::create('pt_BR');
         $users = new Users($this->app);
 
-        for ($i = 0; $i < 10; $i++) {
+        for ( $i = 0; $i < 10; $i++ ) {
             $users->create(['NAME' => $faker->name, 'EMAIL' => $faker->safeEmail]);
         }
 
@@ -54,17 +55,16 @@ class UsersRepositoryTest extends Application
         $this->assertInstanceOf(LengthAwarePaginator::class, $pagination);
     }
 
-    /**
-     * @expectedException \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
     public function testDeleteUser()
     {
+        $this->expectException(ModelNotFoundException::class);
+
         $users = new Users($this->app);
         $id = $users->first()->getAttribute('ID');
 
         $users->delete($id);
 
-        $users->find($id);
+        $users->findOrFail($id);
     }
 
     public function testMassInsert()
@@ -74,7 +74,7 @@ class UsersRepositoryTest extends Application
 
         $newData = [];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ( $i = 0; $i < 10; $i++ ) {
             array_push($newData, ['NAME' => $faker->name, 'EMAIL' => $faker->safeEmail]);
         }
 
