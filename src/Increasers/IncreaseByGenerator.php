@@ -11,23 +11,14 @@ namespace Igrejanet\Firebird\Increasers;
  */
 class IncreaseByGenerator
 {
-    /**
-     * @var string
-     */
-    protected $sql;
+    protected string $sql;
 
-    /**
-     * @param string $generator
-     */
     public function __construct(string $generator)
     {
         $this->sql = 'SELECT GEN_ID('. $generator .', 1) AS CODIGO FROM RDB$DATABASE';
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->sql;
     }
