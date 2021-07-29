@@ -11,24 +11,14 @@ namespace Igrejanet\Firebird\Increasers;
  */
 class IncreaseById
 {
-    /**
-     * @var string
-     */
-    protected $sql;
+    protected string $sql;
 
-    /**
-     * @param string $keyName
-     * @param string $tableName
-     */
     public function __construct(string $keyName, string $tableName)
     {
         $this->sql = 'SELECT COALESCE(MAX('. $keyName .'), 0) + 1 as CODIGO FROM ' . $tableName;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->sql;
     }

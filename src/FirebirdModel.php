@@ -15,10 +15,9 @@ use RuntimeException;
  */
 class FirebirdModel extends Model
 {
-    /**
-     * @var null|string
-     */
-    protected $generator = null;
+    private const DRIVER_NAME = 'firebird';
+
+    protected ?string $generator = null;
 
     /**
      * @param Builder $query
@@ -49,7 +48,7 @@ class FirebirdModel extends Model
 
     public function runningFirebird() : bool
     {
-        return $this->getConnection()->getDriverName() == 'firebird';
+        return $this->getConnection()->getDriverName() == self::DRIVER_NAME;
     }
 
     /**
